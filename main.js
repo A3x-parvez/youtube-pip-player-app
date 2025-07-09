@@ -3,18 +3,18 @@ const path = require('path');
 
 let win;
 
-function createWindow () {
+function createWindow() {
   win = new BrowserWindow({
     width: 640,
     height: 360,
     frame: false,
     alwaysOnTop: true,
     resizable: true,
-    transparent: false,
     webPreferences: {
       preload: path.join(__dirname, 'preload.js'),
-      nodeIntegration: true,  // Required for using `require()` in renderer
-      contextIsolation: false // Disable if you use nodeIntegration
+      nodeIntegration: true,
+      contextIsolation: false,
+      enableRemoteModule: true
     }
   });
 
@@ -24,14 +24,13 @@ function createWindow () {
 
 app.whenReady().then(createWindow);
 
-ipcMain.on('close-window', () => {
-  if (win) win.close();
+ipcMain.on("close-window", () => {
+  win && win.close();
+});
+ipcMain.on("minimize-window", () => {
+  win && win.minimize();
 });
 
-ipcMain.on('minimize-window', () => {
-  if (win) win.minimize();
-});
-
-app.on('window-all-closed', () => {
-  if (process.platform !== 'darwin') app.quit();
+app.on("window-all-closed", () => {
+  if (process.platform !== "darwin") app.quit();
 });
