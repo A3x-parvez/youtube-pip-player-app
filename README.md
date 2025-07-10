@@ -1,4 +1,4 @@
-# 🎬 YouTube PiP Player
+# 🎬 YouTube PiP Player App
 
 A sleek floating YouTube Picture-in-Picture (PiP) player built with **Electron**, designed to stay always on top while you work or code. Just paste any YouTube link and start watching instantly in a lightweight mini player.
 
