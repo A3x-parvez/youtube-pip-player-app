@@ -1,0 +1,40 @@
+{
+  "name": "youtube-pip-player",
+  "version": "1.1.0",
+  "description": "Floating YouTube Picture-in-Picture player built with Electron.",
+  "author": "A3x-Parvez",
+  "license": "MIT",
+  "main": "main.js",
+  "scripts": {
+    "start": "electron .",
+    "build": "electron-builder"
+  },
+  "devDependencies": {
+    "electron": "^29.0.0",
+    "electron-builder": "^24.13.3"
+  },
+  "build": {
+    "appId": "com.yourdomain.ytpip",
+    "productName": "YouTube PiP Player",
+    "directories": {
+      "output": "dist"
+    },
+    "files": [
+      "main.js",
+      "preload.js",
+      "index.html",
+      "styles.css",
+      "icon.png",
+      "package.json"
+    ],
+    "win": {
+      "target": "nsis"
+    },
+    "nsis": {
+      "oneClick": true,
+      "perMachine": false,
+      "allowToChangeInstallationDirectory": false,
+      "runAfterFinish": true
+    }
+  }
+}
