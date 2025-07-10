@@ -24,7 +24,7 @@ desktop.ini
 .vscode/
 
 # Electron builder cache
-*.exe
+
 *.dmg
 *.AppImage
 *.deb

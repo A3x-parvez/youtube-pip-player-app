@@ -7,7 +7,7 @@ A sleek floating YouTube Picture-in-Picture (PiP) player built with **Electron**
 ## 📦 Download
 
 <p align="center">
-  <a href="./YouTube%20PiP%20Player%20Setup%201.1.0.exe">
+  <a href="https://github.com/A3x-parvez/youtube-pip-player-app/releases/tag/v1.1.0">
     <img src="https://img.shields.io/badge/⬇%20Download%20Windows%20Installer-1.1.0-blue?style=for-the-badge&logo=windows" alt="Download .exe" />
   </a>
   <br/>
