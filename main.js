@@ -32,6 +32,9 @@ function createWindow() {
 
   win.loadFile('index.html');
   win.setMenuBarVisibility(false);
+
+     // 🛡️ Prevent new tabs/windows from opening externally
+  win.webContents.setWindowOpenHandler(() => ({ action: "deny" }));
 }
 
 app.whenReady().then(createWindow);

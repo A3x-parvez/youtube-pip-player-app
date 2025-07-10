@@ -21,7 +21,6 @@
     <button onclick="loadVideo()">▶ Play</button>
   </div>
 
-  <!-- ✅ Replaced iframe with webview -->
   <webview
     id="player"
     allowpopups
@@ -46,14 +45,29 @@
       const url = document.getElementById("url").value.trim();
       const videoId = extractVideoID(url);
       const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1`;
+
       const player = document.getElementById("player");
       player.src = embedUrl;
 
-      // Optional: auto play when ready
       player.addEventListener("dom-ready", () => {
-        player.executeJavaScript(
-          `document.querySelector("video")?.play().catch(()=>{});`
-        );
+        // Try to autoplay
+        player.executeJavaScript(`document.querySelector("video")?.play().catch(()=>{});`);
+
+        // Disable window.open and target=_blank links
+        player.executeJavaScript(`window.open = () => null;`);
+      });
+
+      // 🚫 Prevent new tabs/windows from opening
+      player.addEventListener("new-window", (e) => {
+        e.preventDefault();
+      });
+
+      // Optional: block navigation outside YouTube
+      player.addEventListener("will-navigate", (e) => {
+        const allowed = "https://www.youtube.com";
+        if (!e.url.startsWith(allowed)) {
+          e.preventDefault();
+        }
       });
     }
 
