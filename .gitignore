@@ -1,3 +1,53 @@
 node_modules/
 package-lock.json
 package.json
+# Node.js dependencies
+/node_modules/
+.npm/
+
+# Build outputs
+/dist/
+out/
+build/
+
+# Compiled files
+*.log
+*.tsbuildinfo
+
+# macOS system files
+.DS_Store
+
+# Windows system files
+Thumbs.db
+ehthumbs.db
+desktop.ini
+
+# VS Code
+.vscode/
+
+# Electron builder cache
+*.exe
+*.dmg
+*.AppImage
+*.deb
+*.rpm
+*.snap
+*.msi
+*.blockmap
+*.7z
+
+# Electron builder cache folders
+/.cache/
+/.cache/
+/build/cache/
+/win-unpacked/
+/release/
+
+# Environment variables
+.env
+.env.local
+.env.*.local
+
+# Optional IDE folders
+.idea/
+*.iml

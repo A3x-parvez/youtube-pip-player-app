@@ -7,7 +7,7 @@
 </head>
 <body>
   <div id="top-bar">
-    <div class="logo">📺 PiP Player</div>
+    <img src="icon.png" alt="PiP Tube" class="logo" />
     <div class="window-controls">
       <button onclick="toggleControls()">⏷</button>
       <button onclick="toggleFullscreen()">🗖</button>
@@ -21,10 +21,16 @@
     <button onclick="loadVideo()">▶ Play</button>
   </div>
 
-  <iframe id="player" allow="autoplay; encrypted-media" allowfullscreen></iframe>
+  <!-- ✅ Replaced iframe with webview -->
+  <webview
+    id="player"
+    allowpopups
+    style="width: 100%; height: calc(100% - 80px); border: none;"
+  ></webview>
 
   <script>
     const { ipcRenderer } = require('electron');
+    const current = require('electron').remote.getCurrentWindow();
     let isFullscreen = false;
 
     function extractVideoID(url) {
@@ -40,7 +46,15 @@
       const url = document.getElementById("url").value.trim();
       const videoId = extractVideoID(url);
       const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1`;
-      document.getElementById("player").src = embedUrl;
+      const player = document.getElementById("player");
+      player.src = embedUrl;
+
+      // Optional: auto play when ready
+      player.addEventListener("dom-ready", () => {
+        player.executeJavaScript(
+          `document.querySelector("video")?.play().catch(()=>{});`
+        );
+      });
     }
 
     function toggleControls() {
@@ -48,7 +62,6 @@
     }
 
     function toggleFullscreen() {
-      const current = require('electron').remote.getCurrentWindow();
       isFullscreen = !isFullscreen;
       current.setFullScreen(isFullscreen);
     }
