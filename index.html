@@ -1,4 +1,4 @@
-<!DOCTYPE html>
+<!-- <!DOCTYPE html>
 <html lang="en">
 <head>
   <meta charset="UTF-8" />
@@ -31,6 +31,128 @@
     const { ipcRenderer } = require('electron');
     const current = require('electron').remote.getCurrentWindow();
     let isFullscreen = false;
+
+    function extractVideoID(url) {
+      try {
+        const u = new URL(url);
+        return u.searchParams.get("v") || u.pathname.split('/').pop();
+      } catch {
+        return url;
+      }
+    }
+
+    // function loadVideo() {
+    //   const url = document.getElementById("url").value.trim();
+    //   const videoId = extractVideoID(url);
+    //   const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1`;
+
+    //   const player = document.getElementById("player");
+    //   player.src = embedUrl;
+
+    //   player.addEventListener("dom-ready", () => {
+    //     // Try to autoplay
+    //     player.executeJavaScript(`document.querySelector("video")?.play().catch(()=>{});`);
+
+    //     // Disable window.open and target=_blank links
+    //     player.executeJavaScript(`window.open = () => null;`);
+    //   });
+
+    //   // 🚫 Prevent new tabs/windows from opening
+    //   player.addEventListener("new-window", (e) => {
+    //     e.preventDefault();
+    //   });
+
+    //   // Optional: block navigation outside YouTube
+    //   player.addEventListener("will-navigate", (e) => {
+    //     const allowed = "https://www.youtube.com";
+    //     if (!e.url.startsWith(allowed)) {
+    //       e.preventDefault();
+    //     }
+    //   });
+    // }
+    function loadVideo() {
+    const url = document.getElementById("url").value.trim();
+    const videoId = extractVideoID(url);
+    // const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1`;
+    const embedUrl = `https://www.youtube.com/embed/${videoId}?autoplay=1&controls=1&rel=0&modestbranding=1&playsinline=1`;
+
+    const player = document.getElementById("player");
+    player.src = embedUrl;
+
+    player.addEventListener("dom-ready", () => {
+        // Try to autoplay
+        player.executeJavaScript(`document.querySelector("video")?.play().catch(()=>{});`);
+
+        // Disable window.open and target=_blank links
+        player.executeJavaScript(`window.open = () => null;`);
+    });
+
+    // 🚫 Prevent new tabs/windows from opening
+    player.addEventListener("new-window", (e) => {
+        e.preventDefault();
+    });
+
+    // Optional: block navigation outside YouTube
+    player.addEventListener("will-navigate", (e) => {
+        const allowed = "https://www.youtube.com/";
+        if (!e.url.startsWith(allowed)) {
+          e.preventDefault();
+        }
+      });
+      }
+
+
+    function toggleControls() {
+      document.getElementById("control-bar").classList.toggle("hidden");
+    }
+
+    function toggleFullscreen() {
+      isFullscreen = !isFullscreen;
+      current.setFullScreen(isFullscreen);
+    }
+
+    function closeWindow() {
+      ipcRenderer.send("close-window");
+    }
+
+    function minimize() {
+      ipcRenderer.send("minimize-window");
+    }
+  </script>
+</body>
+</html> -->
+
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <title>YouTube PiP</title>
+  <link rel="stylesheet" href="styles.css" />
+</head>
+<body>
+  <div id="top-bar">
+    <img src="icon.png" alt="PiP Tube" class="logo" />
+    <div class="window-controls">
+      <button onclick="toggleControls()">⏷</button>
+      <button onclick="toggleFullscreen()">🗖</button>
+      <button onclick="minimize()">➖</button>
+      <button onclick="closeWindow()">✖</button>
+    </div>
+  </div>
+
+  <div id="control-bar">
+    <input type="text" id="url" placeholder="Paste YouTube URL..." />
+    <button onclick="loadVideo()">▶ Play</button>
+  </div>
+
+  <webview
+    id="player"
+    allowpopups
+    style="width: 100%; height: calc(100% - 80px); border: none;"
+  ></webview>
+
+  <script>
+    const { ipcRenderer } = require('electron');
 
     function extractVideoID(url) {
       try {
@@ -76,8 +198,7 @@
     }
 
     function toggleFullscreen() {
-      isFullscreen = !isFullscreen;
-      current.setFullScreen(isFullscreen);
+      ipcRenderer.send("toggle-fullscreen");
     }
 
     function closeWindow() {
